@@ -1,7 +1,3 @@
-import datetime
-import csv
-
-
 # ==================================================================================
 # Savings Program
 # Benjamin Princen
@@ -22,26 +18,45 @@ import csv
 # Save the .csv file
 # ==================================================================================
 
-csvLoc = "C:\Users\princ\OneDrive\Desktop\Savings\Savings.csv"
+# ==================================================================================
+# Imports
+# ==================================================================================
+import datetime
+import os
+import constants
 
-# object responsible for detecting time
-now = datetime.datetime.now()
+# ==================================================================================
+# Constants
+# ==================================================================================
+CSV_PATH = 'information/money.csv'
 
-# variables represent the category, amount of money, date
-spenton = raw_input("Enter what you spent money on: \n")
-howmuch = "$" + raw_input("Enter how much money you spent: \n")
-date = str(now.month) + "/" + str(now.day) + "/" + str(now.year) + "\n"
-
-# array that contains the above information
-sprdshtinput = [howmuch, spenton, date]
-
-# prints each of the elements in the array for testing purposes
-for x in sprdshtinput:
-    print(x)
+# ==================================================================================
+# Function Definitions
+# ==================================================================================
 
 
-with open(csvLoc, "wb") as Savings:
-    filewriter = csv.writer(Savings, delimiter=' ', quotechar=' ', quoting=csv.QUOTE_MINIMAL)
-    filewriter.writerow(sprdshtinput[1])
-    filewriter.writerow(sprdshtinput[0])
-    filewriter.writerow(sprdshtinput[2])
+
+# ==================================================================================
+# Main
+# ==================================================================================
+def main():
+    # object responsible for detecting time
+    now = datetime.datetime.now()
+
+    create_file = False
+    # variables represent the category, amount of money, date
+    cat_spent = input("Enter what you spent money on: \n") # cat is an abbreviation for category
+    amount_spent = "$" + input("Enter how much money you spent: \n")
+    date_spent = str(now.month) + "/" + str(now.day) + "/" + str(now.year)
+
+    if(not os.path.exists(CSV_PATH)):
+        create_file = True
+
+    csv_file = open(CSV_PATH, 'w+') if create_file else open(CSV_PATH, 'a+')
+    if csv_file.mode == 'w+':
+        print("CATEGORY,AMOUNT SPENT,DATE SPENT", file = csv_file)
+    print(str(cat_spent) + ',' + str(amount_spent) + ',' + date_spent, file = csv_file)
+    csv_file.close()
+
+if __name__ == '__main__':
+    main()
